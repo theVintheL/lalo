@@ -153,14 +153,40 @@ var agecatCenters = { // Center locations of the bubbles.
 
   var screentimeTitleX = {  // X locations of the year titles.
     'bis 1h': 40,
-    '1h bis 2h': 160,
-    '2h bis 3h': 330,
-    '3h bis 4h': 540,
-    '4h bis 5h': 730,
+    '1h bis 2h': 270,
+    '2h bis 3h': 420,
+    '3h bis 4h': 550,
+    '4h bis 5h': 670,
     'mehr als 5h': 900
   };
     
+// Fünfter Button: Sorgenbarometer
+    
+  var concernCenters = { // Center locations of the bubbles. 
+    '1': { x: 290, y: height / 2 },
+    '2': { x: 440, y: height / 2 },
+    '3': { x: 630, y: height / 2 },
+    '4': { x: 770, y: height / 2 } 
+  };
 
+  var concernTitleX = {  // X locations of the year titles.
+    'Stimmt ganz': 120,
+    'Stimmt eher': 355,
+    'Stimmt eher nicht': 685,
+    'Stimmt nicht': 940
+  };
+  
+// Sechster Button: Schutztmassnahmen
+    
+  var protectCenters = { // Center locations of the bubbles. 
+    '0': { x: 440, y: height / 2 },
+    '1': { x: 670, y: height / 2 } 
+  };
+
+  var protectTitleX = {  // X locations of the year titles.
+    'Stimmt ganz': 350,
+    'Stimmt nicht': 719
+  };
        
     
 //* ------------------------------------------------------------------
@@ -228,7 +254,13 @@ var agecatCenters = { // Center locations of the bubbles.
           
         sex: d.geschlecht,
           
-       
+        concern: d.sorgenkat,
+        concerntext: d.sorgen,
+        
+        protect: d.schutzmassnahmen,
+        
+          
+        
         
         x: Math.random() * 900,
         y: Math.random() * 800
@@ -325,6 +357,8 @@ var agecatCenters = { // Center locations of the bubbles.
     hideAgecat();
     hideSex();
     hideScreentime();
+    hideConcern();
+    hideProtect();
 
     
     force.on('tick', function (e) {
@@ -367,6 +401,8 @@ Die Positionierung basiert auf dem alpha Parameter des force layouts und wird kl
     hideAgecat();
     hideSex();
     hideScreentime();
+    hideConcern();
+    hideProtect();
 
 
     force.on('tick', function (e) {
@@ -415,6 +451,8 @@ function moveToYear(alpha) {
     hideYear();
     hideSex();
     hideScreentime();
+    hideConcern();
+    hideProtect();
 
 
     force.on('tick', function (e) {
@@ -463,6 +501,8 @@ function moveToAgecat(alpha) {
     hideYear();
     hideAgecat();
     hideScreentime();
+    hideConcern();
+    hideProtect();
 
 
     force.on('tick', function (e) {
@@ -511,6 +551,8 @@ function moveToAgecat(alpha) {
     hideYear();
     hideSex();
     hideAgecat();
+    hideConcern();
+    hideProtect();
 
 
     force.on('tick', function (e) {
@@ -548,8 +590,105 @@ function moveToAgecat(alpha) {
       .text(function (d) { return d; });
     }    
 
-  
+//* ------------------------------------------------------------------
+//
+// CONCERN / SORGEN
+//
+// -----------------------------------------------------------------*/
     
+  function splitBubblesintoConcern() {
+    showConcern();
+    hideYear();
+    hideSex();
+    hideAgecat();
+    hideScreentime();
+    hideProtect();
+    
+
+    force.on('tick', function (e) {
+      bubbles.each(moveToConcern (e.alpha))
+        .attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; });
+    });
+
+    force.start();
+  }
+
+  function moveToConcern(alpha) {
+    return function (d) {
+      var target = concernCenters[d.concern];
+      d.x = d.x + (target.x - d.x) * damper * alpha * 1.1;
+      d.y = d.y + (target.y - d.y) * damper * alpha * 1.1;
+    };
+  }
+
+  function hideConcern() {
+    svg.selectAll('.concern').remove();
+  }
+
+  function showConcern() {
+
+    var concernData = d3.keys(concernTitleX);
+    var concern = svg.selectAll('.concern')
+      .data(concernData);
+
+    concern.enter().append('text')
+      .attr('class', 'concern')
+      .attr('x', function (d) { return concernTitleX[d]; })
+      .attr('y', 65)
+      .attr('text-anchor', 'middle')
+      .text(function (d) { return d; });
+    }    
+  
+//* ------------------------------------------------------------------
+//
+// Protect / Schutztmassnahmen
+//
+// -----------------------------------------------------------------*/
+    
+  function splitBubblesintoProtect() {
+    showProtect();
+    hideYear();
+    hideSex();
+    hideAgecat();
+    hideScreentime();
+    hideConcern();
+    
+
+    force.on('tick', function (e) {
+      bubbles.each(moveToProtect (e.alpha))
+        .attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; });
+    });
+
+    force.start();
+  }
+
+  function moveToProtect(alpha) {
+    return function (d) {
+      var target = protectCenters[d.protect];
+      d.x = d.x + (target.x - d.x) * damper * alpha * 1.1;
+      d.y = d.y + (target.y - d.y) * damper * alpha * 1.1;
+    };
+  }
+
+  function hideProtect() {
+    svg.selectAll('.protect').remove();
+  }
+
+  function showProtect() {
+
+    var protectData = d3.keys(protectTitleX);
+    var protect = svg.selectAll('.protect')
+      .data(protectData);
+
+    protect.enter().append('text')
+      .attr('class', 'protect')
+      .attr('x', function (d) { return protectTitleX[d]; })
+      .attr('y', 65)
+      .attr('text-anchor', 'middle')
+      .text(function (d) { return d; });
+    }      
     
 //* ------------------------------------------------------------------
 //
@@ -576,6 +715,10 @@ function moveToAgecat(alpha) {
       splitBubblesintoSex();
     } else if (displayName === 'screentime') {
       splitBubblesintoScreentime();
+    } else if (displayName === 'concern') {
+      splitBubblesintoConcern();
+    } else if (displayName === 'protect') {
+      splitBubblesintoProtect();
     } else {
       groupBubbles();
     }
@@ -622,8 +765,14 @@ function moveToAgecat(alpha) {
                   '<span class="name">Bildschirmzeit: </span><span class="value">' +
                   d.screentime +
                   '</span><br/>' +
-                  '<span class="name">"Umfragejahr": </span><span class="value">' +
+                  '<span class="name">Umfragejahr: </span><span class="value">' +
                   d.year +
+                  '</span><br/>' +
+                  '<span class="name">"Ich mache mir Sorgen um meine Daten-": </span><span class="value">' +
+                  d.concerntext +
+                  '</span><br/>' +
+                  '<span class="name">"Ich ziehe Schutztmassnahmen auf ": </span><span class="value">' +
+                  d.protect +
                   '</span>';
     tooltip2.showtooltip2(content, d3.event);
   }
