@@ -179,13 +179,13 @@ var agecatCenters = { // Center locations of the bubbles.
 // Sechster Button: Schutztmassnahmen
     
   var protectCenters = { // Center locations of the bubbles. 
-    '0': { x: 440, y: height / 2 },
-    '1': { x: 670, y: height / 2 } 
+    '0': { x: 390, y: height / 2 },
+    '1': { x: 650, y: height / 2 } 
   };
 
   var protectTitleX = {  // X locations of the year titles.
-    'Stimmt ganz': 350,
-    'Stimmt nicht': 719
+    'Stimmt ganz': 290,
+    'Stimmt nicht': 689
   };
        
     
@@ -749,7 +749,7 @@ function moveToAgecat(alpha) {
 
   var fillColor = d3.scale.ordinal()
     .domain(['1','2','3', '4','5','6'])
-    .range(['#F7CAD0', '#ff006e', '#48CAE4', '#0096C7','#023E8A','#03045E']);
+    .range([ '#629875', '#c295f0','#deb9f2', '#cbf5ee', '#8df1ef', '#c5fc99',]);
 
   /* Tooltip-Funktion*/
   function showDetail(d) {
