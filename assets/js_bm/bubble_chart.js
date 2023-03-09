@@ -153,10 +153,10 @@ var agecatCenters = { // Center locations of the bubbles.
 
   var screentimeTitleX = {  // X locations of the year titles.
     'bis 1h': 40,
-    '1h bis 2h': 270,
-    '2h bis 3h': 420,
-    '3h bis 4h': 550,
-    '4h bis 5h': 670,
+    '1h bis 2h': 170,
+    '2h bis 3h': 335,
+    '3h bis 4h': 529,
+    '4h bis 5h': 720,
     'mehr als 5h': 900
   };
     
